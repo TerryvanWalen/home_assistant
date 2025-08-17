@@ -274,83 +274,81 @@ actions:
       helper_hold_dim_step: 4
       light: !input light
   - choose:
-      - conditions:
-          - condition: trigger
-            id:
-              - press-on-zha-e2201
-              - press-on-z2m-e2201
-              - press-dots1-zha-e2213
-              - press-dots1-z2m-e2213
-        sequence:
-          - choose:
-              - conditions: "{{ helper_force_brightness }}"
-                sequence:
-                  - action: light.turn_on
-                    target: !input light
-                    data:
-                      brightness_pct: !input helper_brightness
-            default:
-              - action: light.turn_on
+    - conditions:
+      - condition: trigger
+        id:
+          - press-on-zha-e2201
+          - press-on-z2m-e2201
+          - press-dots1-zha-e2213
+          - press-dots1-z2m-e2213
+      sequence:
+        - choose:
+          - conditions: "{{ helper_force_brightness }}"
+            sequence:
+              - service: light.turn_on
                 target: !input light
-                data: {}
-      - conditions:
-          - condition: trigger
-            id:
-              - press-off-zha-e2201
-              - press-off-z2m-e2201
-              - press-dots2-zha-e2213
-              - press-dots2-z2m-e2213
-        sequence:
-          - action: light.turn_off
-            target: !input light
-            data: {}
-      - conditions:
-          - condition: trigger
-            id:
-              - hold-on-zha-e2201
-              - hold-on-z2m-e2201
-              - hold-dots1-zha-e2213
-              - hold-dots1-z2m-e2213
-        sequence:
-          - repeat:
-              while:
-                - condition: trigger
-                  id:
-                    - hold-on-zha-e2201
-                    - hold-on-z2m-e2201
-                    - hold-dots1-zha-e2213
-                    - hold-dots1-z2m-e2213
-              sequence:
-                - parallel:
-                    - action: light.turn_on
-                      target: !input light
-                      data:
-                        brightness_step_pct: "{{ helper_hold_dim_step }}"
-                        transition: "{{ helper_hold_delay }}"
-                    - delay: "{{ helper_hold_delay }}"
-      - conditions:
-          - condition: trigger
-            id:
-              - hold-off-zha-e2201
-              - hold-off-z2m-e2201
-              - hold-dots2-zha-e2213
-              - hold-dots2-z2m-e2213
-        sequence:
-          - variables:
-              brightness_pct: "{{ iif(is_state(light, 'on'), state_attr(light, 'brightness'), 0) * 100 / 255 }}"
-              total_iterations_to_zero: "{{ (brightness_pct / helper_hold_dim_step) | round(0, 'ceil') }}"
-          - repeat:
-              count: "{{ total_iterations_to_zero - 1 }}"
-              sequence:
-                - parallel:
-                    - action: light.turn_on
-                      target: !input light
-                      data:
-                        brightness_step_pct: "{{ helper_hold_dim_step | int * -1 }}"
-                        transition: "{{ helper_hold_delay }}"
-                    - delay: "{{ helper_hold_delay }}"
-          - action: light.turn_on
-            target: !input light
-            data:
-              brightness_pct: 1
-              transition: "{{ helper_hold_delay }}"
+                data:
+                  brightness_pct: !input helper_brightness
+          default:
+            - service: light.turn_on
+              target: !input light
+              data: {}
+    - conditions:
+      - condition: trigger
+        id:
+          - press-off-zha-e2201
+          - press-off-z2m-e2201
+          - press-dots2-zha-e2213
+          - press-dots2-z2m-e2213
+      sequence:
+        - service: light.turn_off
+          target: !input light
+          data: {}
+    - conditions:
+      - condition: trigger
+        id:
+          - hold-on-zha-e2201
+          - hold-on-z2m-e2201
+          - hold-dots1-zha-e2213
+          - hold-dots1-z2m-e2213
+      sequence:
+        - repeat:
+          while:
+            - condition: trigger
+              id:
+                - hold-on-zha-e2201
+                - hold-on-z2m-e2201
+                - hold-dots1-zha-e2213
+                - hold-dots1-z2m-e2213
+          sequence:
+            - parallel:
+                - service: light.turn_on
+                  target: !input light
+                  data:
+                    brightness_step_pct: "{{ helper_hold_dim_step }}"
+                    transition: "{{ helper_hold_delay }}"
+                - delay: "{{ helper_hold_delay }}"
+    - conditions:
+      - condition: trigger
+        id:
+          - hold-off-zha-e2201
+          - hold-off-z2m-e2201
+          - hold-dots2-zha-e2213
+          - hold-dots2-z2m-e2213
+      sequence:
+        - repeat:
+          while:
+            - condition: trigger
+              id:
+                - hold-on-zha-e2201
+                - hold-on-z2m-e2201
+                - hold-dots1-zha-e2213
+                - hold-dots1-z2m-e2213
+          sequence:
+            - parallel:
+                - service: light.turn_on
+                  target: !input light
+                  data:
+                    brightness_step_pct: "{{ helper_hold_dim_step | int * -1 }}"
+                    transition: "{{ helper_hold_delay }}"
+                - delay: "{{ helper_hold_delay }}"
