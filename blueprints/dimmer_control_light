@@ -259,7 +259,6 @@ triggers:
     id: release-hold-dots2-z2m-e2213
 actions:
   - variables:
-      helper_force_brightness: !input helper_force_brightness
       helper_hold_delay: 0.1
       light: !input light
   - choose:
@@ -271,17 +270,9 @@ actions:
           - press-dots1-zha-e2213
           - press-dots1-z2m-e2213
       sequence:
-        - choose:
-          - conditions: "{{ helper_force_brightness }}"
-            sequence:
-              - action: light.turn_on
-                target: !input light
-                data:
-                  brightness_pct: !input helper_brightness
-          default:
-            - action: light.turn_on
-              target: !input light
-              data: {}
+        - action: light.turn_on
+          target: !input light
+          data: {}
     - conditions:
       - condition: trigger
         id:
