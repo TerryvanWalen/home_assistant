@@ -286,14 +286,12 @@ actions:
               - conditions: "{{ helper_force_brightness }}"
                 sequence:
                   - action: light.turn_on
-                    target:
-                      entity_id: !input light
+                    target: !input light
                     data:
                       brightness_pct: !input helper_brightness
             default:
               - action: light.turn_on
-                target:
-                  entity_id: !input light
+                target: !input light
                 data: {}
       - conditions:
           - condition: trigger
@@ -304,8 +302,7 @@ actions:
               - press-dots2-z2m-e2213
         sequence:
           - action: light.turn_off
-            target:
-              entity_id: !input light
+            target: !input light
             data: {}
       - conditions:
           - condition: trigger
@@ -326,8 +323,7 @@ actions:
               sequence:
                 - parallel:
                     - action: light.turn_on
-                      target:
-                        entity_id: !input light
+                      target: !input light
                       data:
                         brightness_step_pct: "{{ helper_hold_dim_step }}"
                         transition: "{{ helper_hold_delay }}"
@@ -348,15 +344,13 @@ actions:
               sequence:
                 - parallel:
                     - action: light.turn_on
-                      target:
-                        entity_id: !input light
+                      target: !input light
                       data:
                         brightness_step_pct: "{{ helper_hold_dim_step | int * -1 }}"
                         transition: "{{ helper_hold_delay }}"
                     - delay: "{{ helper_hold_delay }}"
           - action: light.turn_on
-            target:
-              entity_id: !input light
+            target: !input light
             data:
               brightness_pct: 1
               transition: "{{ helper_hold_delay }}"
