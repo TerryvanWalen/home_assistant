@@ -340,10 +340,10 @@ actions:
             while:
               - condition: trigger
                 id:
-                  - hold-on-zha-e2201
-                  - hold-on-z2m-e2201
-                  - hold-dots1-zha-e2213
-                  - hold-dots1-z2m-e2213
+                  - hold-off-zha-e2201
+                  - hold-off-z2m-e2201
+                  - hold-dots2-zha-e2213
+                  - hold-dots2-z2m-e2213
             sequence:
               - parallel:
                   - action: light.turn_on
