@@ -260,6 +260,7 @@ triggers:
 actions:
   - variables:
       helper_hold_delay: 0.1
+      hold_dim_step_pct: !input hold_dim_step_pct
       light: !input light
   - choose:
     - conditions:
