@@ -4,7 +4,7 @@ blueprint:
   domain: automation
   source_url: https://github.com/TerryvanWalen/home_assistant/blueprints/motion_light_timeofdate.yaml
   metadata:
-    source_url_original: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
+  - source_url_original: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
   author: Home Assistant
   input:
     motion_entity:
