@@ -99,22 +99,22 @@ actions:
           brightness_pct: !input day_brightness
   - conditions:
     - condition: time
-        after: !input evening_start
-        before: !input night_start
-      sequence:
-        - service: light.turn_on`
-          target: !input light_target
-          data:
-            brightness_pct: !input evening_brightness
+      after: !input evening_start
+      before: !input night_start
+    sequence:
+      - service: light.turn_on`
+        target: !input light_target
+        data:
+          brightness_pct: !input evening_brightness
   - conditions:
     - condition: time
-        after: !input night_start
-        before: !input day_start
-      sequence:
-        - service: light.turn_on
-          target: !input light_target
-          data:
-            brightness_pct: !input night_brightness
+      after: !input night_start
+      before: !input day_start
+    sequence:
+      - service: light.turn_on
+        target: !input light_target
+        data:
+          brightness_pct: !input night_brightness
 - alias: Wait until there is no motion from device
   wait_for_trigger:
     trigger: state
