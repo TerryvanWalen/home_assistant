@@ -66,25 +66,15 @@ blueprint:
       icon: mdi:lightbulb-on-50
       collapsed: true
       input:
-        helper_force_brightness:
-          name: Force brightness
-          description: Force the brightness to **Brightness** value when light turns on.
-          default: false
-          selector:
-            boolean: {}
-        helper_brightness:
+        hold_dim_step_pct:
           name: Brightness
-          description:
-            Target light brightness when turning on. Requires **Force brightness**
-            to be enabled.
-          default: 50
+          description: Brightness step percentage
+          default: 4
           selector:
             number:
               unit_of_measurement: "%"
               min: 1.0
               max: 100.0
-              step: 1.0
-              mode: slider
 mode: restart
 max_exceeded: silent
 triggers:
@@ -271,7 +261,6 @@ actions:
   - variables:
       helper_force_brightness: !input helper_force_brightness
       helper_hold_delay: 0.1
-      helper_hold_dim_step: 4
       light: !input light
   - choose:
     - conditions:
@@ -325,7 +314,7 @@ actions:
                   - action: light.turn_on
                     target: !input light
                     data:
-                      brightness_step_pct: "{{ helper_hold_dim_step }}"
+                      brightness_step_pct: "{{ hold_dim_step_pct }}"
                       transition: "{{ helper_hold_delay }}"
                   - delay: "{{ helper_hold_delay }}"
     - conditions:
@@ -349,6 +338,6 @@ actions:
                   - action: light.turn_on
                     target: !input light
                     data:
-                      brightness_step_pct: "{{ helper_hold_dim_step | int * -1 }}"
+                      brightness_step_pct: "{{ hold_dim_step_pct | int * -1 }}"
                       transition: "{{ helper_hold_delay }}"
                   - delay: "{{ helper_hold_delay }}"
