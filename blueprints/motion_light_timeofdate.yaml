@@ -1,0 +1,128 @@
+blueprint:
+  name: Motion-activated Light (with TimeOfDate brightness)
+  description: Turn on a light when motion is detected.
+  domain: automation
+  source_url: https://github.com/TerryvanWalen/home_assistant/blueprints/motion_light_timeofdate.yaml
+  metadata:
+    source_url_original: https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
+  author: Home Assistant
+  input:
+    motion_entity:
+      name: Motion Sensor
+      selector:
+        entity:
+          filter:
+          - device_class:
+            - occupancy
+            domain:
+            - binary_sensor
+          - device_class:
+            - motion
+            domain:
+            - binary_sensor
+          multiple: false
+    light_target:
+      name: Light
+      selector:
+        target:
+          entity:
+          - domain:
+            - light
+    day_start:
+      name: Day start time
+      default: "07:30:00"
+      selector:
+        time: {}
+    day_brightness:
+      name: Day brightness (%)
+      default: 70
+      selector:
+        number:
+          min: 1
+          max: 100
+          unit_of_measurement: "%"
+    evening_start:
+      name: Evening start time
+      default: "21:00:00"
+      selector:
+        time: {}
+    evening_brightness:
+      name: Evening brightness (%)
+      default: 50
+      selector:
+        number:
+          min: 1
+          max: 100
+          unit_of_measurement: "%"
+    night_start:
+      name: Night start time
+      default: "23:00:00"
+      selector:
+        time: {}
+    night_brightness:
+      name: Night brightness (%)
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 100
+          unit_of_measurement: "%"
+    no_motion_wait:
+      name: Wait time
+      description: Time to leave the light on after last motion is detected.
+      default: 120
+      selector:
+        number:
+          min: 0.0
+          max: 3600.0
+          unit_of_measurement: seconds
+          step: 1.0
+          mode: slider
+mode: restart
+max_exceeded: silent
+triggers:
+  trigger: state
+  entity_id: !input motion_entity
+  from: 'off'
+  to: 'on'
+actions:
+- alias: Turn on the light
+- choose:
+  - conditions:
+    - condition: time
+      after: !input day_start
+      before: !input evening_start
+    sequence:
+      - service: light.turn_on
+        target: !input light_target
+        data:
+          brightness_pct: !input day_brightness
+  - conditions:
+    - condition: time
+        after: !input evening_start
+        before: !input night_start
+      sequence:
+        - service: light.turn_on`
+          target: !input light_target
+          data:
+            brightness_pct: !input evening_brightness
+  - conditions:
+    - condition: time
+        after: !input night_start
+        before: !input day_start
+      sequence:
+        - service: light.turn_on
+          target: !input light_target
+          data:
+            brightness_pct: !input night_brightness
+- alias: Wait until there is no motion from device
+  wait_for_trigger:
+    trigger: state
+    entity_id: !input motion_entity
+    from: 'on'
+    to: 'off'
+- alias: Wait the number of seconds that has been set
+  delay: !input no_motion_wait
+- alias: Turn off the light
+  action: light.turn_off
+  target: !input light_target
