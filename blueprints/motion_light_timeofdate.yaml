@@ -4,7 +4,7 @@ blueprint:
   description: Turn on a light when motion is detected.
   domain: automation
   source_url: https://github.com/TerryvanWalen/home_assistant/blueprints/motion_light_timeofdate.yaml
-  author: Home Assistant
+  author: Terry van Walen
   input:
     motion_entity:
       name: Motion Sensor
@@ -27,7 +27,7 @@ blueprint:
       selector:
         time: {}
     day_brightness:
-      name: Day brightness (%)
+      name: Day brightness
       default: 70
       selector:
         number:
@@ -36,12 +36,12 @@ blueprint:
           unit_of_measurement: "%"
     evening_start:
       name: Evening start time
-      default: "21:00:00"
+      default: "20:00:00"
       selector:
         time: {}
     evening_brightness:
-      name: Evening brightness (%)
-      default: 50
+      name: Evening brightness
+      default: 40
       selector:
         number:
           min: 1
@@ -53,8 +53,8 @@ blueprint:
       selector:
         time: {}
     night_brightness:
-      name: Night brightness (%)
-      default: 10
+      name: Night brightness
+      default: 1
       selector:
         number:
           min: 1
@@ -63,14 +63,12 @@ blueprint:
     no_motion_wait:
       name: Wait time
       description: Time to leave the light on after last motion is detected.
-      default: 120
+      default: 420
       selector:
         number:
           min: 0.0
           max: 3600.0
           unit_of_measurement: seconds
-          step: 1.0
-          mode: slider
 
 mode: restart
 max_exceeded: silent
