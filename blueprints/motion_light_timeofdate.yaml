@@ -82,7 +82,6 @@ triggers:
   to: "on"
 
 actions:
-  - alias: Turn on the light
   - choose:
     - conditions:
       - condition: time
