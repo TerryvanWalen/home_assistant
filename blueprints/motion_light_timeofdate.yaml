@@ -107,18 +107,18 @@ triggers:
 
 variables:
   now_time: "{{ now().strftime('%H:%M:%S') }}"
-  day_start: "{{ day_section.input.day_start }}"
-  day_brightness: "{{ day_section.input.day_brightness }}"
-  day_wait: "{{ day_section.input.day_wait }}"
-  evening_start: "{{ night_section.input.night_start }}"
-  evening_brightness: "{{ night_section.input.evening_brightness }}"
-  evening_wait: "{{ night_section.input.evening_wait }}"
-  night_start: "{{ evening_section.input.evening_start }}"
-  night_brightness: "{{ evening_section.input.night_brightness }}"
-  night_wait: "{{ evening_section.input.night_wait }}"
-  dark_start: "{{ dark_section.input.dark_start }}"
-  dark_brightness: "{{ dark_section.input.dark_brightness }}"
-  dark_wait: "{{ dark_section.input.dark_wait}}"
+  day_start: !input day_start
+  day_brightness: !input  day_brightness
+  day_wait: !input day_wait
+  evening_start: !input evening_start
+  evening_brightness: !input evening_brightness
+  evening_wait: !input evening_wait
+  night_start: !input night_start
+  night_brightness: !input night_brightness
+  night_wait: !input night_wait
+  dark_start: !input dark_start
+  dark_brightness: !input dark_brightness
+  dark_wait: !input dark_wait
   period_values: >
     {% if day_start <= now_time < evening_start %}
       [{{ day_brightness }}, {{ day_wait }}]
