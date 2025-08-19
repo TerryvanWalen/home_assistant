@@ -35,7 +35,7 @@ blueprint:
       name: Start time
       default: "07:15:00"
       selector: &time_selector
-      time: {}
+        time: {}
 
     day_brightness:
       name: Brightness
@@ -50,10 +50,10 @@ blueprint:
       name: Wait time
       default: 420
       selector: &wait_selector
-      number:
-        min: 0.0
-        max: 3600.0
-        unit_of_measurement: seconds
+        number:
+          min: 0.0
+          max: 3600.0
+          unit_of_measurement: seconds
 
     evening_section:
       name: Evening
