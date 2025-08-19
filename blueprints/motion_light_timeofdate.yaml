@@ -72,36 +72,29 @@ blueprint:
       icon: mdi:weather-night
       collapsed: false
       input:
-        night_start:
-          name: Start time
+        evening_start:
+          <<: *day
           default: "23:00:00"
-          selector: *time_selector
-        night_brightness:
-          name: Brightness
+        evening_brightness:
+          <<: *brightness
           default: 1
-          selector: *brightness_selector
-        night_wait:
-          name: Wait time
-          default: 420
-          selector: *wait_selector
+        evening_wait:
+          <<: *wait
 
     dark_section:
       name: Dark
       icon: mdi:brightness-2
       collapsed: false
       input:
-        dark_start:
-          name: Start time
+        evening_start:
+          <<: *day
           default: "23:45:00"
-          selector: *time_selector
-        dark_brightness:
-          name: Brightness
+        evening_brightness:
+          <<: *brightness
           default: 0
-          selector: *brightness_selector
-        dark_wait:
-          name: Wait time
-          default: 0
-          selector: *wait_selector
+        evening_wait:
+          <<: *wait
+          default: 1
 
 mode: restart
 max_exceeded: silent
@@ -124,8 +117,8 @@ variables:
     {% else %}
       [{{ dark_brightness }}, {{ dark_wait }}]
     {% endif %}
-  brightness: "{{ period_values[0] }}"
-  wait_time: "{{ period_values[1] }}"
+  brightness: "{{ period_values[0] | int}}"
+  wait_time: "{{ period_values[1] | int}}"
   
 actions:
   - service: light.turn_on
