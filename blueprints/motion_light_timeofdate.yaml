@@ -5,9 +5,7 @@ blueprint:
   domain: automation
   source_url: https://github.com/TerryvanWalen/home_assistant/blueprints/motion_light_timeofdate.yaml
   author: Terry van Walen
-  input:
 input:
-  input:
   # reusable selectors
   brightness_selector: &brightness_selector
     number:
@@ -42,11 +40,11 @@ input:
         entity:
           - domain: light
 
-  # Day
+  # Sections
   day_section:
     name: Day
     icon: mdi:white-balance-sunny
-    collapsed: true
+    collapsed: false
 
   day_start:
     name: Start time
@@ -63,11 +61,10 @@ input:
     default: 420
     selector: *wait_selector
 
-  # Evening
   evening_section:
     name: Evening
     icon: mdi:weather-sunset
-    collapsed: true
+    collapsed: false
 
   evening_start:
     name: Start time
@@ -84,11 +81,10 @@ input:
     default: 420
     selector: *wait_selector
 
-  # Night
   night_section:
     name: Night
     icon: mdi:weather-night
-    collapsed: true
+    collapsed: false
 
   night_start:
     name: Start time
@@ -105,11 +101,10 @@ input:
     default: 420
     selector: *wait_selector
 
-  # Dark
   dark_section:
     name: Dark
     icon: mdi:brightness-2
-    collapsed: true
+    collapsed: false
 
   dark_start:
     name: Start time
@@ -136,15 +131,16 @@ triggers:
   to: "on"
 
 variables:
+  now_time: "{{ now().strftime('%H:%M:%S') }}"
   period_values: >
-    {% if day_start <= now().strftime("%H:%M") < evening_start %}
-      [{{ day_brightness }}, {{ day_no_motion_wait }}]
-    {% elif evening_start <= now().strftime("%H:%M") < night_start %}
-      [{{ evening_brightness }}, {{ evening_no_motion_wait }}]
-    {% elif night_start <= now().strftime("%H:%M") < dark_start %}
-      [{{ night_brightness }}, {{ night_no_motion_wait }}]
+    {% if day_start <= now_time < evening_start %}
+      [{{ day_brightness }}, {{ day_wait }}]
+    {% elif evening_start <= now_time < night_start %}
+      [{{ evening_brightness }}, {{ evening_wait }}]
+    {% elif night_start <= now_time < dark_start %}
+      [{{ night_brightness }}, {{ night_wait }}]
     {% else %}
-      [{{ dark_brightness }}, {{ dark_no_motion_wait }}]
+      [{{ dark_brightness }}, {{ dark_wait }}]
     {% endif %}
   brightness: "{{ period_values[0] }}"
   wait_time: "{{ period_values[1] }}"
