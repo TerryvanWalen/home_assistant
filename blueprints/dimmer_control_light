@@ -67,9 +67,18 @@ blueprint:
       collapsed: true
       input:
         hold_dim_step_pct:
-          name: Brightness
+          name: Brightness step
           description: Brightness step percentage
           default: 4
+          selector:
+            number:
+              unit_of_measurement: "%"
+              min: 1.0
+              max: 100.0
+        max_brightness:
+          name: Brightness max
+          description: Brightness max percentage
+          default: 100
           selector:
             number:
               unit_of_measurement: "%"
@@ -261,6 +270,7 @@ actions:
   - variables:
       helper_hold_delay: 0.1
       hold_dim_step_pct: !input hold_dim_step_pct
+      max_brightness: !input max_brightness
       light: !input light
   - choose:
     - conditions:
@@ -316,6 +326,8 @@ actions:
           - hold-off-z2m-e2201
           - hold-dots2-zha-e2213
           - hold-dots2-z2m-e2213
+      - condition: template
+        value_template: "{{ (state_attr(light.entity_id, 'brightness') | int(0) / 2.55) < (max_brightness | int) }}"
       sequence:
         - repeat:
             while:
