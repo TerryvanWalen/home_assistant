@@ -72,13 +72,13 @@ blueprint:
       icon: mdi:weather-night
       collapsed: false
       input:
-        evening_start:
+        night_start:
           <<: *day
           default: "23:00:00"
-        evening_brightness:
+        night_brightness:
           <<: *brightness
           default: 1
-        evening_wait:
+        night_wait:
           <<: *wait
 
     dark_section:
@@ -86,13 +86,13 @@ blueprint:
       icon: mdi:brightness-2
       collapsed: false
       input:
-        evening_start:
+        dark_start:
           <<: *day
           default: "23:45:00"
-        evening_brightness:
+        dark_brightness:
           <<: *brightness
           default: 0
-        evening_wait:
+        dark_wait:
           <<: *wait
           default: 1
 
