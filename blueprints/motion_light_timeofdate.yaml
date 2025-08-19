@@ -1,27 +1,13 @@
 # Based on https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
 blueprint:
+  homeassistant:
+    min_version: 2024.10.0
   name: Motion-activated Light (with TimeOfDate brightness)
   description: Turn on a light when motion is detected.
   domain: automation
   source_url: https://github.com/TerryvanWalen/home_assistant/blueprints/motion_light_timeofdate.yaml
   author: Terry van Walen
   input:
-    # reusable selectors
-    brightness_selector: &brightness_selector
-      number:
-        min: 0
-        max: 100
-        unit_of_measurement: "%"
-
-    wait_selector: &wait_selector
-      number:
-        min: 0.0
-        max: 3600.0
-        unit_of_measurement: seconds
-
-    time_selector: &time_selector
-      time: {}
-
     # entities
     motion_entity:
       name: Motion Sensor
@@ -48,17 +34,26 @@ blueprint:
     day_start:
       name: Start time
       default: "07:15:00"
-      selector: *time_selector
+      selector: &time_selector
+      time: {}
 
     day_brightness:
       name: Brightness
       default: 80
-      selector: *brightness_selector
+      selector: &brightness_selector
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
 
     day_wait:
       name: Wait time
       default: 420
-      selector: *wait_selector
+      selector: &wait_selector
+      number:
+        min: 0.0
+        max: 3600.0
+        unit_of_measurement: seconds
 
     evening_section:
       name: Evening
