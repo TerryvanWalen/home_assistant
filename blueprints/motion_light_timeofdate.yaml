@@ -31,9 +31,18 @@ blueprint:
       default: 70
       selector:
         number:
-          min: 1
+          min: 0
           max: 100
           unit_of_measurement: "%"
+    day_wait:
+      name: Day wait time
+      description: Time to leave the light on after last motion is detected.
+      default: 420
+      selector:
+        number:
+          min: 0.0
+          max: 3600.0
+          unit_of_measurement: seconds
     evening_start:
       name: Evening start time
       default: "20:00:00"
@@ -44,9 +53,18 @@ blueprint:
       default: 40
       selector:
         number:
-          min: 1
+          min: 0
           max: 100
           unit_of_measurement: "%"
+    evening_wait:
+      name: Evening wait time
+      description: Time to leave the light on after last motion is detected.
+      default: 420
+      selector:
+        number:
+          min: 0.0
+          max: 3600.0
+          unit_of_measurement: seconds
     night_start:
       name: Night start time
       default: "23:00:00"
@@ -57,11 +75,33 @@ blueprint:
       default: 1
       selector:
         number:
-          min: 1
+          min: 0
           max: 100
           unit_of_measurement: "%"
-    no_motion_wait:
-      name: Wait time
+    night_wait:
+      name: Night wait time
+      description: Time to leave the light on after last motion is detected.
+      default: 420
+      selector:
+        number:
+          min: 0.0
+          max: 3600.0
+          unit_of_measurement: seconds
+    dark_start:
+      name: Night start time
+      default: "23:00:00"
+      selector:
+        time: {}
+    dark_brightness:
+      name: Night brightness
+      default: 1
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+    dark_wait:
+      name: Dark wait time
       description: Time to leave the light on after last motion is detected.
       default: 420
       selector:
@@ -90,6 +130,12 @@ actions:
           target: !input light_target
           data:
             brightness_pct: !input day_brightness
+        - wait_for_trigger:
+            trigger: state
+            entity_id: !input motion_entity
+            from: "on"
+            to: "off"
+        - delay: !input no_motion_wait
     - conditions:
       - condition: time
         after: !input evening_start
@@ -99,23 +145,42 @@ actions:
           target: !input light_target
           data:
             brightness_pct: !input evening_brightness
+        - wait_for_trigger:
+            trigger: state
+            entity_id: !input motion_entity
+            from: "on"
+            to: "off"
+        - delay: !input no_motion_wait
     - conditions:
       - condition: time
         after: !input night_start
-        before: !input day_start
+        before: !input dark_start
       sequence:
         - service: light.turn_on
           target: !input light_target
           data:
             brightness_pct: !input night_brightness
-  - alias: Wait until there is no motion from device
-    wait_for_trigger:
-      trigger: state
-      entity_id: !input motion_entity
-      from: "on"
-      to: "off"
-  - alias: Wait the number of seconds that has been set
-    delay: !input no_motion_wait
+        - wait_for_trigger:
+            trigger: state
+            entity_id: !input motion_entity
+            from: "on"
+            to: "off"
+        - delay: !input no_motion_wait
+    - conditions:
+      - condition: time
+        after: !input dark_start
+        before: !input day_start
+      sequence:
+        - service: light.turn_on
+          target: !input light_target
+          data:
+            brightness_pct: !input dark_brightness
+        - wait_for_trigger:
+            trigger: state
+            entity_id: !input motion_entity
+            from: "on"
+            to: "off"
+        - delay: !input no_motion_wait
   - alias: Turn off the light
     action: light.turn_off
     target: !input light_target
