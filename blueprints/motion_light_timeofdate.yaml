@@ -1,4 +1,19 @@
 # Based on https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
+
+time_selector: &time_selector
+  time: {}
+brightness_selector: &brightness_selector
+  number:
+    min: 0
+    max: 100
+    unit_of_measurement: "%"
+wait_selector: &wait_selector
+  number:
+    min: 0.0
+    max: 3600.0
+    unit_of_measurement: seconds
+
+
 blueprint:
   homeassistant:
     min_version: 2024.10.0
