@@ -1,19 +1,4 @@
 # Based on https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml
-
-time_selector: &time_selector
-  time: {}
-brightness_selector: &brightness_selector
-  number:
-    min: 0
-    max: 100
-    unit_of_measurement: "%"
-wait_selector: &wait_selector
-  number:
-    min: 0.0
-    max: 3600.0
-    unit_of_measurement: seconds
-
-
 blueprint:
   homeassistant:
     min_version: 2024.10.0
@@ -46,36 +31,41 @@ blueprint:
       icon: mdi:white-balance-sunny
       collapsed: false
       input:
-        day_start:
+        day_start: &day
           name: Start time
           default: "07:15:00"
-          selector: *time_selector
-        day_brightness:
+          selector: &time_selector
+            time: {}
+        day_brightness: &brightness
           name: Brightness
           default: 80
-          selector: *brightness_selector
-        day_wait:
+          selector: &brightness_selector
+            number:
+              min: 0
+              max: 100
+              unit_of_measurement: "%"
+        day_wait: &wait
           name: Wait time
           default: 420
-          selector: *wait_selector
-
+          selector: &wait_selector
+            number:
+              min: 0.0
+              max: 3600.0
+              unit_of_measurement: seconds
+    
     evening_section:
       name: Evening
       icon: mdi:weather-sunset
       collapsed: false
       input:
         evening_start:
-          name: Start time
+          <<: *day
           default: "19:00:00"
-          selector: *time_selector
         evening_brightness:
-          name: Brightness
+          <<: *brightness
           default: 40
-          selector: *brightness_selector
         evening_wait:
-          name: Wait time
-          default: 420
-          selector: *wait_selector
+          <<: *wait
 
     night_section:
       name: Night
