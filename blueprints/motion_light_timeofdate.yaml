@@ -5,121 +5,121 @@ blueprint:
   domain: automation
   source_url: https://github.com/TerryvanWalen/home_assistant/blueprints/motion_light_timeofdate.yaml
   author: Terry van Walen
-input:
-  # reusable selectors
-  brightness_selector: &brightness_selector
-    number:
-      min: 0
-      max: 100
-      unit_of_measurement: "%"
+  input:
+    # reusable selectors
+    brightness_selector: &brightness_selector
+      number:
+        min: 0
+        max: 100
+        unit_of_measurement: "%"
 
-  wait_selector: &wait_selector
-    number:
-      min: 0.0
-      max: 3600.0
-      unit_of_measurement: seconds
+    wait_selector: &wait_selector
+      number:
+        min: 0.0
+        max: 3600.0
+        unit_of_measurement: seconds
 
-  time_selector: &time_selector
-    time: {}
+    time_selector: &time_selector
+      time: {}
 
-  # entities
-  motion_entity:
-    name: Motion Sensor
-    selector:
-      entity:
-        filter:
-          - device_class: occupancy
-            domain: binary_sensor
-          - device_class: motion
-            domain: binary_sensor
-
-  light_target:
-    name: Light
-    selector:
-      target:
+    # entities
+    motion_entity:
+      name: Motion Sensor
+      selector:
         entity:
-          - domain: light
+          filter:
+            - device_class: occupancy
+              domain: binary_sensor
+            - device_class: motion
+              domain: binary_sensor
 
-  # Sections
-  day_section:
-    name: Day
-    icon: mdi:white-balance-sunny
-    collapsed: false
+    light_target:
+      name: Light
+      selector:
+        target:
+          entity:
+            - domain: light
 
-  day_start:
-    name: Start time
-    default: "07:15:00"
-    selector: *time_selector
+    # Sections
+    day_section:
+      name: Day
+      icon: mdi:white-balance-sunny
+      collapsed: false
 
-  day_brightness:
-    name: Brightness
-    default: 80
-    selector: *brightness_selector
+    day_start:
+      name: Start time
+      default: "07:15:00"
+      selector: *time_selector
 
-  day_wait:
-    name: Wait time
-    default: 420
-    selector: *wait_selector
+    day_brightness:
+      name: Brightness
+      default: 80
+      selector: *brightness_selector
 
-  evening_section:
-    name: Evening
-    icon: mdi:weather-sunset
-    collapsed: false
+    day_wait:
+      name: Wait time
+      default: 420
+      selector: *wait_selector
 
-  evening_start:
-    name: Start time
-    default: "19:00:00"
-    selector: *time_selector
+    evening_section:
+      name: Evening
+      icon: mdi:weather-sunset
+      collapsed: false
 
-  evening_brightness:
-    name: Brightness
-    default: 40
-    selector: *brightness_selector
+    evening_start:
+      name: Start time
+      default: "19:00:00"
+      selector: *time_selector
 
-  evening_wait:
-    name: Wait time
-    default: 420
-    selector: *wait_selector
+    evening_brightness:
+      name: Brightness
+      default: 40
+      selector: *brightness_selector
 
-  night_section:
-    name: Night
-    icon: mdi:weather-night
-    collapsed: false
+    evening_wait:
+      name: Wait time
+      default: 420
+      selector: *wait_selector
 
-  night_start:
-    name: Start time
-    default: "23:00:00"
-    selector: *time_selector
+    night_section:
+      name: Night
+      icon: mdi:weather-night
+      collapsed: false
 
-  night_brightness:
-    name: Brightness
-    default: 1
-    selector: *brightness_selector
+    night_start:
+      name: Start time
+      default: "23:00:00"
+      selector: *time_selector
 
-  night_wait:
-    name: Wait time
-    default: 420
-    selector: *wait_selector
+    night_brightness:
+      name: Brightness
+      default: 1
+      selector: *brightness_selector
 
-  dark_section:
-    name: Dark
-    icon: mdi:brightness-2
-    collapsed: false
+    night_wait:
+      name: Wait time
+      default: 420
+      selector: *wait_selector
 
-  dark_start:
-    name: Start time
-    default: "23:45:00"
-    selector: *time_selector
+    dark_section:
+      name: Dark
+      icon: mdi:brightness-2
+      collapsed: false
 
-  dark_brightness:
-    name: Brightness
-    default: 0
-    selector: *brightness_selector
+    dark_start:
+      name: Start time
+      default: "23:45:00"
+      selector: *time_selector
 
-  dark_wait:
-    name: Wait time
-    default: 0
-    selector: *wait_selector
+    dark_brightness:
+      name: Brightness
+      default: 0
+      selector: *brightness_selector
+
+    dark_wait:
+      name: Wait time
+      default: 0
+      selector: *wait_selector
 
 mode: restart
 max_exceeded: silent
